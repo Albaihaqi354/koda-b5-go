@@ -9,30 +9,20 @@ type Payment interface {
 type BankPayment struct{}
 
 func (b BankPayment) Pay(price []int) error {
-	total := 0
-	for _, p := range price {
-		if p <= 0 {
-			return fmt.Errorf("harga tidak valid")
-		}
-		total += p
+	if price[0] <= 0 {
+		return fmt.Errorf("harga tidak valid")
 	}
-
-	fmt.Println("Pembayaran BANK:", total)
+	fmt.Printf("Pembayaran Bank BCA: Rp.%d\n", price[0])
 	return nil
 }
 
 type OnlinePayment struct{}
 
 func (o OnlinePayment) Pay(price []int) error {
-	total := 0
-	for _, o := range price {
-		if o <= 0 {
-			return fmt.Errorf("harga tidak valid")
-		}
-		total += o
+	if price[0] <= 0 {
+		return fmt.Errorf("harga tidak valid")
 	}
-
-	fmt.Println("Pembayaran Online:", total)
+	fmt.Printf("Pembayaran Online QRIS: Rp.%d\n", price[0])
 	return nil
 }
 
@@ -41,14 +31,11 @@ type FiktifPayment struct {
 }
 
 func (f *FiktifPayment) Pay(price []int) error {
-	total := 0
 	for _, p := range price {
 		if p <= 0 {
 			return fmt.Errorf("harga tidak valid")
 		}
-		total += p
+		f.Data = append(f.Data, p)
 	}
-
-	f.Data = append(f.Data, total)
 	return nil
 }

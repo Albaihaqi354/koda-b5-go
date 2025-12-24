@@ -6,6 +6,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strconv"
 
 	checkout "github.com/Albaihaqi354/koda5-b5-go/checkeout"
 	"github.com/Albaihaqi354/koda5-b5-go/createperson"
@@ -80,16 +81,74 @@ func main() {
 	fmt.Println(person.Greet())
 
 	// Minitask 8
-	prices := []int{100000, 20000, 30000}
+	fmt.Println("Pilih metode pembayaran:")
+	fmt.Println("1. Bank Bca")
+	fmt.Println("2. Online Qris")
+	fmt.Println("3. Fiktif")
+	fmt.Print("Pilihan: ")
+
+	scanner.Scan()
+	pilihan := scanner.Text()
+
+	var prices []int
+
+	switch pilihan {
+	case "1", "2":
+		fmt.Print("Masukkan nominal: Rp.")
+		scanner.Scan()
+		input := scanner.Text()
+
+		nominal, err := strconv.Atoi(input)
+		if err != nil || nominal <= 0 {
+			fmt.Println("Nominal tidak valid")
+			return
+		}
+
+		prices = append(prices, nominal)
+
+	case "3":
+		fmt.Println("Masukkan nominal (0 untuk selesai):")
+		for {
+			fmt.Print("Nominal: Rp.")
+			scanner.Scan()
+			input := scanner.Text()
+
+			nominal, err := strconv.Atoi(input)
+			if err != nil {
+				fmt.Println("Harus angka")
+				continue
+			}
+
+			if nominal == 0 {
+				break
+			}
+
+			prices = append(prices, nominal)
+		}
+
+	default:
+		fmt.Println("Pilihan tidak valid")
+		return
+	}
 
 	bank := checkout.BankPayment{}
 	online := checkout.OnlinePayment{}
 	fiktif := checkout.FiktifPayment{}
 
-	bank.Pay(prices)
-	online.Pay(prices)
-	fiktif.Pay(prices)
+	switch pilihan {
+	case "1":
+		bank.Pay(prices)
 
-	fmt.Println("pembayaran fiktif:", fiktif.Data)
+	case "2":
+		online.Pay(prices)
+
+	case "3":
+		fiktif.Pay(prices)
+
+		fmt.Println("Nominal pembayaran fiktif:")
+		for i, v := range fiktif.Data {
+			fmt.Printf("%d. Rp. %d\n", i+1, v)
+		}
+	}
 
 }
