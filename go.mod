@@ -1,3 +1,3 @@
 module github.com/Albaihaqi354/koda5-b5-go
 
-go 1.22.3
+go 1.25.3
