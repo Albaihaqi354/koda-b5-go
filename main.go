@@ -1,13 +1,9 @@
 package main
 
-import "github.com/Albaihaqi354/koda5-b5-go/minitask10"
-
-// "os"
-//
-// "bufio"
-// "os"
-
-// "github.com/Albaihaqi354/koda5-b5-go/minitask9"
+import (
+	"github.com/Albaihaqi354/koda5-b5-go/minitask11"
+	// "github.com/Albaihaqi354/koda5-b5-go/minitask9"
+)
 
 func main() {
 	// scanner := bufio.NewScanner(os.Stdin)
@@ -149,21 +145,55 @@ func main() {
 	// 	}
 	// }
 
-	msgChanel := make(chan minitask10.Message)
+	// minitask 10
+	// msgChanel := make(chan minitask10.Message)
 
-	go minitask10.Blackboard(msgChanel)
+	// go minitask10.Blackboard(msgChanel)
 
-	minitask10.MsgSender(
-		msgChanel, minitask10.NewMessage("Bian", "Sudah Makan?"),
-	)
+	// minitask10.MsgSender(
+	// 	msgChanel, minitask10.NewMessage("Bian", "Sudah Makan?"),
+	// )
 
-	minitask10.MsgSender(
-		msgChanel, minitask10.NewMessage("Bunda", "Bantu Belanja"),
-	)
+	// minitask10.MsgSender(
+	// 	msgChanel, minitask10.NewMessage("Bunda", "Bantu Belanja"),
+	// )
 
-	minitask10.MsgSender(
-		msgChanel, minitask10.NewMessage("Adik", "Bantu Belajar"),
-	)
+	// minitask10.MsgSender(
+	// 	msgChanel, minitask10.NewMessage("Adik", "Bantu Belajar"),
+	// )
 
-	close(msgChanel)
+	// close(msgChanel)
+
+	// minitask 11
+	rekening := minitask11.Rekening{}
+
+	transaksi := make(chan func())
+
+	go func() {
+		for tran := range transaksi {
+			tran()
+		}
+	}()
+
+	transaksi <- func() {
+		rekening.Deposit(1_000_000)
+	}
+
+	transaksi <- func() {
+		rekening.Transfer(500_000)
+	}
+
+	transaksi <- func() {
+		rekening.Transfer(500_000)
+	}
+
+	transaksi <- func() {
+		rekening.Deposit(250_000)
+	}
+
+	transaksi <- func() {
+		rekening.Transfer(500_000)
+	}
+
+	close(transaksi)
 }
